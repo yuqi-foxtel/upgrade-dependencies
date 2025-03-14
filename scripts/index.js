@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-import { exec } from "child_process";
 import simpleGit from "simple-git";
 import { resolve } from "path";
 import {
@@ -9,6 +8,7 @@ import {
   DEPENDENCIES_TO_UPGRADE,
   BRANCH_NAME,
 } from "../inputs.js";
+import { executeCommand } from "../utils.js";
 
 function getDependencyNameFromUrl(url) {
   const match = url.match(/\/(?<name>[^/]+)\/version\/[^/]+\/package\.tgz$/);
@@ -59,22 +59,7 @@ function upgradeDependencies(repoName) {
   ).join(" ");
 
   console.log(`Upgrading ${dependenciesToUpgrade} in ${repoPath}...`);
-  return new Promise((resolve, reject) => {
-    exec(
-      `npm install ${dependenciesToUpgrade} -f`,
-      {
-        cwd: repoPath,
-        stdio: "inherit",
-      },
-      (error) => {
-        if (error) {
-          reject(new Error(`exec npm install error: ${error}`));
-        } else {
-          resolve();
-        }
-      }
-    );
-  });
+  return executeCommand(repoPath, `npm install ${dependenciesToUpgrade} -f`);
 }
 
 async function commit(git) {
@@ -87,13 +72,17 @@ async function pushBranch(git) {
   console.log(`Pushed branch: ${BRANCH_NAME}`);
 }
 
+function pushQA(repoName) {
+  return executeCommand(getRepoPath(repoName), "git push-qa");
+}
+
 async function upgradeRepo(repoName) {
   try {
     const git = await openRepo(repoName);
     await switchBranch(git);
     await upgradeDependencies(repoName);
     await commit(git);
-    await pushBranch(git);
+    await Promise.all([pushBranch(git), pushQA(repoName)]);
 
     console.log(
       `✅ Dependency upgrade completed successfully for ${repoName}!`
