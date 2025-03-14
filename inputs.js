@@ -16,10 +16,12 @@ export const REPO_BASE_DIR = "";
  *   "martian",
  *   "ares",
  *   "flash",
- *   "life"
+ *   "life",
+ *   "hawk"
  * ]
  */
-export const REPOS_TO_UPGRADE = ["martian", "ares", "flash", "life"];
+export const REPOS_TO_UPGRADE = ["martian", "ares", "flash", "life", "hawk"];
+
 /**
  * An array of URLs pointing to the dependencies that need to be upgraded.
  * Each URL corresponds to a specific package version.
@@ -31,6 +33,7 @@ export const REPOS_TO_UPGRADE = ["martian", "ares", "flash", "life"];
  * ]
  */
 export const DEPENDENCIES_TO_UPGRADE = [];
+
 /**
  * The name of the branch to create or switch to.
  *
