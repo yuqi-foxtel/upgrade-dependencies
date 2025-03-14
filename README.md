@@ -19,12 +19,15 @@ To get started with upgrading dependencies, follow these steps:
    npm install
    ```
 
-3. Set input variables in [script](scripts/index.js):
+3. Set input variables in [inputs.js](./inputs.js):
 
    ```sh
    const REPO_BASE_DIR = '/path/to/your/repositories';
+
    const REPOS_TO_UPGRADE = ["martian","ares", "flash", "life"];
+
    const DEPENDENCIES_TO_UPGRADE = ["https://web.kayosports.com.au/streamotion-web-app/player-abc/version/xyz/package.tgz"];
+
    const BRANCH_NAME = "feat/xxx-123-upgrade-dependencies"
    ```
 
