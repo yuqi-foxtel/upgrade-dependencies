@@ -1,50 +1,14 @@
 #!/usr/bin/env node
 
-const { execSync } = require("child_process");
-const simpleGit = require("simple-git");
-const path = require("path");
-
-/**
- * The base directory where the repositories are located.
- *
- * @constant {string}
- * @example
- * "/Users/username/Projects"
- */
-const REPO_BASE_DIR = "";
-
-/**
- * An array of repository names to upgrade.
- *
- * @constant {string[]}
- * @example
- * [
- *   "martian",
- *   "ares",
- *   "flash",
- *   "life"
- * ]
- */
-const REPOS_TO_UPGRADE = ["martian", "ares", "flash", "life"];
-/**
- * An array of URLs pointing to the dependencies that need to be upgraded.
- * Each URL corresponds to a specific package version.
- *
- * @constant {string[]}
- * @example
- * [
- *  "https://web.kayosports.com.au/streamotion-web-app/player-abc/version/xyz/package.tgz",
- * ]
- */
-const DEPENDENCIES_TO_UPGRADE = [];
-/**
- * The name of the branch to create or switch to.
- *
- * @constant {string}
- * @example
- * "feat/xxx-123-upgrade-dependencies"
- */
-const BRANCH_NAME = "";
+import { exec } from "child_process";
+import simpleGit from "simple-git";
+import { resolve } from "path";
+import {
+  REPO_BASE_DIR,
+  REPOS_TO_UPGRADE,
+  DEPENDENCIES_TO_UPGRADE,
+  BRANCH_NAME,
+} from "../inputs.js";
 
 function getDependencyNameFromUrl(url) {
   const match = url.match(/\/(?<name>[^/]+)\/version\/[^/]+\/package\.tgz$/);
@@ -57,7 +21,7 @@ function getDependencyNameFromUrl(url) {
 }
 
 function getRepoPath(repoName) {
-  return path.resolve(REPO_BASE_DIR, `streamotion-web-${repoName}-widgets`);
+  return resolve(REPO_BASE_DIR, `streamotion-web-${repoName}-widgets`);
 }
 
 async function openRepo(repoName) {

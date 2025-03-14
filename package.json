@@ -2,6 +2,7 @@
   "name": "upgrade-dependencies",
   "version": "1.0.0",
   "description": "A script to upgrade dependencies for web widget repositories.",
+  "type": "module",
   "scripts": {
     "start": "node scripts/index.js"
   },
