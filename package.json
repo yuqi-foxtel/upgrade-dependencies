@@ -1,0 +1,15 @@
+{
+  "name": "upgrade-dependencies",
+  "version": "1.0.0",
+  "description": "A script to upgrade dependencies for web widget repositories.",
+  "scripts": {
+    "start": "node scripts/index.js"
+  },
+  "bin": {
+    "upgrade-dep": "./scripts/index.js"
+  },
+  "author": "",
+  "dependencies": {
+    "simple-git": "^3.27.0"
+  }
+}
