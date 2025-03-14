@@ -82,11 +82,6 @@ async function commit(git) {
   await git.commit("update dependencies");
 }
 
-async function remoteBranchExists(git) {
-  const branches = await git.branch(["-r"]);
-  return branches.all.includes(`origin/${BRANCH_NAME}`);
-}
-
 async function pushBranch(git) {
   await git.push("origin", BRANCH_NAME, { "--set-upstream": null });
   console.log(`Pushed branch: ${BRANCH_NAME}`);
@@ -98,7 +93,7 @@ async function upgradeRepo(repoName) {
     await switchBranch(git);
     await upgradeDependencies(repoName);
     await commit(git);
-    if (!(await remoteBranchExists(git))) await pushBranch(git);
+    await pushBranch(git);
 
     console.log(
       `✅ Dependency upgrade completed successfully for ${repoName}!`
