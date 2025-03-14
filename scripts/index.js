@@ -95,9 +95,21 @@ function upgradeDependencies(repoName) {
   ).join(" ");
 
   console.log(`Upgrading ${dependenciesToUpgrade} in ${repoPath}...`);
-  execSync(`npm install ${dependenciesToUpgrade} -f`, {
-    cwd: repoPath,
-    stdio: "inherit",
+  return new Promise((resolve, reject) => {
+    exec(
+      `npm install ${dependenciesToUpgrade} -f`,
+      {
+        cwd: repoPath,
+        stdio: "inherit",
+      },
+      (error) => {
+        if (error) {
+          reject(new Error(`exec npm install error: ${error}`));
+        } else {
+          resolve();
+        }
+      }
+    );
   });
 }
 
@@ -120,7 +132,7 @@ async function upgradeRepo(repoName) {
   try {
     const git = await openRepo(repoName);
     await switchBranch(git);
-    upgradeDependencies(repoName);
+    await upgradeDependencies(repoName);
     await commit(git);
     if (!(await remoteBranchExists(git))) await pushBranch(git);
 
@@ -133,7 +145,7 @@ async function upgradeRepo(repoName) {
 }
 
 function main() {
-  REPOS_TO_UPGRADE.forEach(upgradeRepo);
+  Promise.all(REPOS_TO_UPGRADE.map(upgradeRepo));
 }
 
 main();
